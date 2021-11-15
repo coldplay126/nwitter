@@ -1,3 +1,5 @@
-const Auth = () => <span>Auth</span>;
+const Auth = () => {
+  return <span>auth</span>;
+};
 
 export default Auth;
