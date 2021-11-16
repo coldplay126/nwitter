@@ -1,9 +1,8 @@
 import { useState } from "react";
 import AppRouter from "components/Router";
-import { auth } from "fb";
 
 function App() {
-  const [isLogIn, setIslogIn] = useState(auth.currentUser);
+  const [isLogIn, setIslogIn] = useState(false);
 
   return (
     <>
