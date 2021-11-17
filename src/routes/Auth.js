@@ -1,4 +1,11 @@
-import { auth, createUser, signIn } from "fb";
+import {
+  auth,
+  createUser,
+  signIn,
+  githubProvider,
+  googleProvider,
+  popUp,
+} from "fb";
 import { useState } from "react";
 
 const Auth = () => {
@@ -12,12 +19,12 @@ const Auth = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
     try {
+      let data;
       if (newAccount) {
-        const data = await createUser(auth, form.email, form.password);
+        data = await createUser(form.email, form.password);
       } else {
-        const data = await signIn(auth, form.email, form.password);
+        data = await signIn(auth, form.email, form.password);
       }
     } catch (err) {
       setError(err.message);
@@ -25,6 +32,22 @@ const Auth = () => {
   };
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
+
+  const socialClick = async (e) => {
+    const {
+      target: { name },
+    } = e;
+
+    try {
+      if (name === "google") {
+        await popUp(auth, googleProvider);
+      } else if (name === "github") {
+        await popUp(auth, githubProvider);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div>
@@ -55,8 +78,12 @@ const Auth = () => {
         {newAccount ? "Sign In" : "Create Account"}
       </span>
       <div>
-        <button>Contiune with Google</button>
-        <button>Contiune with GitHub</button>
+        <button name="google" onClick={socialClick}>
+          Contiune with Google
+        </button>
+        <button name="github" onClick={socialClick}>
+          Contiune with GitHub
+        </button>
       </div>
     </div>
   );

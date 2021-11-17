@@ -4,6 +4,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -14,6 +17,11 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_MESSAGEING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
 };
+
+// const curry =
+//   (f) =>
+//   (a, ...bs) =>
+//     bs.length ? f(a, ...bs) : (...bs) => f(a, ...bs);
 
 export default initializeApp(firebaseConfig);
 
@@ -27,3 +35,10 @@ export const signIn = async (auth, email, password) =>
 
 export const authState = (auth, callback) =>
   onAuthStateChanged(auth, (user) => callback(user));
+
+export const googleProvider = new GoogleAuthProvider();
+
+export const githubProvider = new GithubAuthProvider();
+
+export const popUp = async (auth, provider) =>
+  await signInWithPopup(auth, provider);
