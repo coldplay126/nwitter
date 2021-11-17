@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
 } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -23,8 +24,9 @@ const firebaseConfig = {
 //   (a, ...bs) =>
 //     bs.length ? f(a, ...bs) : (...bs) => f(a, ...bs);
 
-export default initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
+//Auth
 export const auth = getAuth();
 
 export const createUser = async (auth, email, password) =>
@@ -42,3 +44,9 @@ export const githubProvider = new GithubAuthProvider();
 
 export const popUp = async (auth, provider) =>
   await signInWithPopup(auth, provider);
+
+//DB
+export const db = getFirestore();
+
+export const docRef = async (db, docu, object) =>
+  await addDoc(collection(db, docu), object);

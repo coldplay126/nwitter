@@ -13,7 +13,10 @@ const Auth = () => {
   const [newAccount, setNewAccount] = useState(true);
   const [error, setError] = useState("");
 
-  const onChanage = ({ target: { name, value } }) => {
+  const onChanage = (e) => {
+    const {
+      target: { name, value },
+    } = e;
     setForm({ ...form, [name]: value });
   };
 
