@@ -4,6 +4,7 @@ import { useState } from "react";
 const Auth = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState("");
 
   const onChanage = ({ target: { name, value } }) => {
     setForm({ ...form, [name]: value });
@@ -19,9 +20,11 @@ const Auth = () => {
         const data = await signIn(auth, form.email, form.password);
       }
     } catch (err) {
-      console.log(err);
+      setError(err.message);
     }
   };
+
+  const toggleAccount = () => setNewAccount((prev) => !prev);
 
   return (
     <div>
@@ -42,11 +45,19 @@ const Auth = () => {
           value={form.password}
           onChange={onChanage}
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
+        <input
+          type="submit"
+          value={newAccount ? "Create Account" : "Sign In"}
+        />
+        {error}
       </form>
-
-      <button>Contiune with Google</button>
-      <button>Contiune with GitHub</button>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign In" : "Create Account"}
+      </span>
+      <div>
+        <button>Contiune with Google</button>
+        <button>Contiune with GitHub</button>
+      </div>
     </div>
   );
 };
