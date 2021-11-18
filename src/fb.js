@@ -8,7 +8,17 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
 } from "firebase/auth";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  onSnapshot,
+  doc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -50,3 +60,29 @@ export const db = getFirestore();
 
 export const docRef = async (db, docu, object) =>
   await addDoc(collection(db, docu), object);
+
+export const querySnapShot = async (db, docu) =>
+  await getDocs(collection(db, docu));
+
+export const snapShot = (db, path, segm, callback) =>
+  onSnapshot(doc(db, path, segm), callback);
+
+//const literal = (a, b) => orderBy(a, b);
+
+export const snap = (
+  db,
+  path,
+  name = undefined,
+  option = undefined,
+  callback
+) => {
+  name && option
+    ? onSnapshot(query(collection(db, path), orderBy(name, option)), callback)
+    : onSnapshot(query(collection(db, path)), callback);
+};
+
+// export const snap = (db, path, callback, orderby = undefined) => {
+//   orderby
+//     ? onSnapshot(query(collection(db, path).order()), callback)
+//     : onSnapshot(query(collection(db, path)), callback);
+// };

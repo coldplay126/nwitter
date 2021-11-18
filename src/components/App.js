@@ -5,12 +5,15 @@ import { auth, authState } from "fb";
 function App() {
   const [init, setInit] = useState(false);
   const [isLogIn, setIslogIn] = useState(false);
+  const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
     //effect;
     return authState(auth, (user) => {
-      if (user) setIslogIn(true);
-      else setIslogIn(false);
+      if (user) {
+        setIslogIn(true);
+        setUserObj(user);
+      } else setIslogIn(false);
 
       setInit(true);
     });
@@ -18,7 +21,7 @@ function App() {
 
   return (
     <>
-      {init ? <AppRouter isLogIn={isLogIn} /> : "Loading..."}
+      {init ? <AppRouter isLogIn={isLogIn} userObj={userObj} /> : "Loading..."}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </>
   );
