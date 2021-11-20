@@ -18,6 +18,8 @@ import {
   doc,
   query,
   orderBy,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -148,6 +150,26 @@ export const snap = (
         callback,
       );
 };
+
+export const deleteNweet = async (
+  db,
+  col,
+  id,
+) =>
+  await deleteDoc(
+    doc(db, col, id),
+  );
+
+export const updateNweet = async (
+  db,
+  col,
+  id,
+  update,
+) =>
+  await updateDoc(
+    doc(db, col, id),
+    update,
+  );
 
 // export const snap = (db, path, callback, orderby = undefined) => {
 //   orderby
