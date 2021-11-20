@@ -9,43 +9,75 @@ import {
 import { useState } from "react";
 
 const Auth = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [newAccount, setNewAccount] = useState(true);
-  const [error, setError] = useState("");
+  const [form, setForm] = useState(
+    {
+      email: "",
+      password: "",
+    },
+  );
+  const [
+    newAccount,
+    setNewAccount,
+  ] = useState(true);
+  const [error, setError] =
+    useState("");
 
   const onChanage = (e) => {
     const {
       target: { name, value },
     } = e;
-    setForm({ ...form, [name]: value });
+    setForm({
+      ...form,
+      [name]: value,
+    });
   };
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (
+    event,
+  ) => {
     event.preventDefault();
     try {
       let data;
       if (newAccount) {
-        data = await createUser(form.email, form.password);
+        data = await createUser(
+          form.email,
+          form.password,
+        );
       } else {
-        data = await signIn(auth, form.email, form.password);
+        data = await signIn(
+          auth,
+          form.email,
+          form.password,
+        );
       }
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const toggleAccount = () => setNewAccount((prev) => !prev);
+  const toggleAccount = () =>
+    setNewAccount((prev) => !prev);
 
-  const socialClick = async (e) => {
+  const socialClick = async (
+    e,
+  ) => {
     const {
       target: { name },
     } = e;
 
     try {
       if (name === "google") {
-        await popUp(auth, googleProvider);
-      } else if (name === "github") {
-        await popUp(auth, githubProvider);
+        await popUp(
+          auth,
+          googleProvider,
+        );
+      } else if (
+        name === "github"
+      ) {
+        await popUp(
+          auth,
+          githubProvider,
+        );
       }
     } catch (err) {
       setError(err.message);
@@ -73,18 +105,32 @@ const Auth = () => {
         />
         <input
           type="submit"
-          value={newAccount ? "Create Account" : "Sign In"}
+          value={
+            newAccount
+              ? "Create Account"
+              : "Sign In"
+          }
         />
         {error}
       </form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "Sign In" : "Create Account"}
+      <span
+        onClick={toggleAccount}
+      >
+        {newAccount
+          ? "Sign In"
+          : "Create Account"}
       </span>
       <div>
-        <button name="google" onClick={socialClick}>
+        <button
+          name="google"
+          onClick={socialClick}
+        >
           Contiune with Google
         </button>
-        <button name="github" onClick={socialClick}>
+        <button
+          name="github"
+          onClick={socialClick}
+        >
           Contiune with GitHub
         </button>
       </div>

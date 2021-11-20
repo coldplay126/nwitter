@@ -3,8 +3,10 @@ import { useNavigate } from "react-router";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const signout = async () => await auth.signOut();
-  const redirect = (a) => navigate(a);
+  const signout = async () =>
+    await auth.signOut();
+  const redirect = (a) =>
+    navigate(a);
 
   const onLogoutClick = () => {
     signout().then(redirect("/"));
@@ -12,7 +14,10 @@ const Profile = () => {
 
   return (
     <>
-      <button name="LogOut" onClick={onLogoutClick}>
+      <button
+        name="LogOut"
+        onClick={onLogoutClick}
+      >
         Log Out
       </button>
     </>

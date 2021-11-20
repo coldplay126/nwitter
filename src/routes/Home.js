@@ -1,10 +1,21 @@
-import { db, docRef, snap } from "fb";
-import { useEffect, useState } from "react";
+import Nweet from "components/Nweet";
+import {
+  db,
+  docRef,
+  snap,
+} from "fb";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 const Home = ({ userObj }) => {
-  const [nweet, setNweet] = useState("");
-  const [nweets, setNweets] = useState([]);
-  const [error, setError] = useState("");
+  const [nweet, setNweet] =
+    useState("");
+  const [nweets, setNweets] =
+    useState([]);
+  const [error, setError] =
+    useState("");
 
   // old one
   // const getQuery = async () => {
@@ -22,14 +33,21 @@ const Home = ({ userObj }) => {
 
   useEffect(() => {
     //refer to fb.js
-    snap(db, "nweets", "CreatedAt", "desc", (doc) => {
-      const nweetArr = doc.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    snap(
+      db,
+      "nweets",
+      (doc) => {
+        const nweetArr =
+          doc.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
 
-      setNweets(nweetArr);
-    });
+        setNweets(nweetArr);
+      },
+      "CreatedAt",
+      "desc",
+    );
   }, []);
 
   const onSubmit = async (e) => {
@@ -63,14 +81,22 @@ const Home = ({ userObj }) => {
           value={nweet}
           onChange={onChange}
         />
-        <input type="submit" value="Nweet" />
+        <input
+          type="submit"
+          value="Nweet"
+        />
         {error}
       </form>
       <div>
         {nweets.map((nweet) => (
-          <div key={nweet.id}>
-            <h4>{nweet.text}</h4>
-          </div>
+          <Nweet
+            key={nweet.id}
+            isOwner={
+              nweet.creatorId ===
+              userObj.uid
+            }
+            nweetObj={nweet}
+          />
         ))}
       </div>
     </div>

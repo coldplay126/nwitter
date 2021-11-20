@@ -1,21 +1,42 @@
-import { Route, Routes } from "react-router-dom";
+import {
+  Route,
+  Routes,
+} from "react-router-dom";
 import Auth from "routes/Auth";
 import Home from "routes/Home";
 import Profile from "routes/Profile";
 import Navigation from "components/Navigation";
 
-const AppRouter = ({ isLogIn, userObj }) => {
+const AppRouter = ({
+  isLogIn,
+  userObj,
+}) => {
   return (
     <>
-      <div>{isLogIn && <Navigation />}</div>
+      <div>
+        {isLogIn && <Navigation />}
+      </div>
       <Routes>
         {isLogIn ? (
           <>
-            <Route path="/" element={<Home userObj={userObj} />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  userObj={userObj}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
           </>
         ) : (
-          <Route path="/" element={<Auth />} />
+          <Route
+            path="/"
+            element={<Auth />}
+          />
         )}
       </Routes>
     </>
