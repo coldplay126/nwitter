@@ -76,7 +76,7 @@ const Home = ({ userObj }) => {
     }
   };
 
-  const onRef = useRef();
+  const onRef = useRef("");
 
   const onImage = (e) => {
     const {
