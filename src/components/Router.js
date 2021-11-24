@@ -1,20 +1,45 @@
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import Auth from "../routes/Auth";
-import Home from "../routes/Home";
+import {
+  Route,
+  Routes,
+} from "react-router-dom";
+import Auth from "routes/Auth";
+import Home from "routes/Home";
+import Profile from "routes/Profile";
+import Navigation from "components/Navigation";
 
-const AppRouter = ({ isLogIn, auth }) => {
+const AppRouter = ({
+  isLogIn,
+  userObj,
+}) => {
   return (
-    <Router>
+    <>
+      <div>
+        {isLogIn && <Navigation />}
+      </div>
       <Routes>
         {isLogIn ? (
           <>
-            <Route exact path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  userObj={userObj}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
           </>
         ) : (
-          <Route exact path="/" element={<Auth auth={auth} />} />
+          <Route
+            path="/"
+            element={<Auth />}
+          />
         )}
       </Routes>
-    </Router>
+    </>
   );
 };
 
