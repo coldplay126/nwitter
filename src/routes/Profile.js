@@ -3,20 +3,21 @@ import { useNavigate } from "react-router";
 
 const Profile = () => {
   const navigate = useNavigate();
+
   const signout = async () =>
     await auth.signOut();
-  const redirect = (a) =>
-    navigate(a);
 
-  const onLogoutClick = () => {
-    signout().then(redirect("/"));
+  const OnLogoutClick = () => {
+    signout().then((_) =>
+      navigate("/"),
+    );
   };
 
   return (
     <>
       <button
         name="LogOut"
-        onClick={onLogoutClick}
+        onClick={OnLogoutClick}
       >
         Log Out
       </button>

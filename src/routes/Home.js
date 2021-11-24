@@ -7,6 +7,7 @@ import {
 import {
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 const Home = ({ userObj }) => {
@@ -16,6 +17,8 @@ const Home = ({ userObj }) => {
     useState([]);
   const [error, setError] =
     useState("");
+  const [preview, setPreview] =
+    useState();
 
   // old one
   // const getQuery = async () => {
@@ -52,16 +55,43 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await docRef(db, "nweets", {
-        text: nweet,
-        CreatedAt: Date.now(),
-        creatorId: userObj.uid,
-      });
-      setNweet("");
-    } catch (err) {
-      setError(err);
+    const {
+      target: { value },
+    } = e;
+    if (value === nweet) {
+      try {
+        await docRef(
+          db,
+          "nweets",
+          {
+            text: nweet,
+            CreatedAt: Date.now(),
+            creatorId: userObj.uid,
+          },
+        );
+        setNweet("");
+      } catch (err) {
+        setError(err);
+      }
     }
+  };
+
+  const onRef = useRef();
+
+  const onImage = (e) => {
+    const {
+      target: { files },
+    } = e;
+
+    const url =
+      window.URL.createObjectURL(
+        files[0],
+      );
+    setPreview(url);
+    window.onload = () =>
+      window.URL.revokeObjectURL(
+        url,
+      );
   };
 
   const onChange = (e) => {
@@ -69,6 +99,11 @@ const Home = ({ userObj }) => {
       target: { value },
     } = e;
     setNweet(value);
+  };
+
+  const onAttachment = () => {
+    setPreview(null);
+    onRef.current.value = null;
   };
 
   return (
@@ -82,9 +117,31 @@ const Home = ({ userObj }) => {
           onChange={onChange}
         />
         <input
+          type="file"
+          accept="image/*"
+          onChange={onImage}
+          ref={onRef}
+        />
+        <input
           type="submit"
           value="Nweet"
         />
+        {preview && (
+          <div>
+            <img
+              height="100px"
+              src={preview}
+              alt="thumbnail"
+            />
+            <button
+              onClick={
+                onAttachment
+              }
+            >
+              clear
+            </button>
+          </div>
+        )}
         {error}
       </form>
       <div>

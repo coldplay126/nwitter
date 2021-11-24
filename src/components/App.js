@@ -11,31 +11,27 @@ import {
 function App() {
   const [init, setInit] =
     useState(false);
-  const [isLogIn, setIslogIn] =
-    useState(false);
   const [userObj, setUserObj] =
     useState(null);
 
-  useEffect(() => {
-    //effect;
-    return authState(
-      auth,
-      (user) => {
-        if (user) {
-          setIslogIn(true);
-          setUserObj(user);
-        } else setIslogIn(false);
+  useEffect(
+    () =>
+      authState(auth, (user) => {
+        if (user) setUserObj(user);
+        else setUserObj(null);
 
         setInit(true);
-      },
-    );
-  }, []);
+      }),
+    [],
+  );
+
+  const islogIn = Boolean(userObj);
 
   return (
     <>
       {init ? (
         <AppRouter
-          isLogIn={isLogIn}
+          isLogIn={islogIn}
           userObj={userObj}
         />
       ) : (

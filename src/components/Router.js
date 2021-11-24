@@ -29,7 +29,11 @@ const AppRouter = ({
             />
             <Route
               path="/profile"
-              element={<Profile />}
+              element={
+                <Profile
+                  userObj={userObj}
+                />
+              }
             />
           </>
         ) : (

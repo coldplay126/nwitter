@@ -64,28 +64,32 @@ const Nweet = ({
     <div>
       {edit ? (
         <>
-          <form
-            onSubmit={onSubmit}
-          >
-            <input
-              type="text"
-              placeholder="내용을 수정하세요"
-              onChange={onEdit}
-              value={newNweet}
-              required
-            />
-            <input
-              type="submit"
-              value="트윕 업데이트"
-            />
-          </form>
-          <button
-            onClick={
-              onClickHandler
-            }
-          >
-            취소
-          </button>
+          {isOwner && (
+            <>
+              <form
+                onSubmit={onSubmit}
+              >
+                <input
+                  type="text"
+                  placeholder="내용을 수정하세요"
+                  onChange={onEdit}
+                  value={newNweet}
+                  required
+                />
+                <input
+                  type="submit"
+                  value="수정"
+                />
+              </form>
+              <button
+                onClick={
+                  onClickHandler
+                }
+              >
+                취소
+              </button>
+            </>
+          )}
         </>
       ) : (
         <>
