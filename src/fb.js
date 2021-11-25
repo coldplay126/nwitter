@@ -22,6 +22,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
 const firebaseConfig = {
   apiKey:
     process.env.REACT_APP_API_KEY,
@@ -39,17 +46,19 @@ const firebaseConfig = {
       .REACT_APP_MESSAGEING_SENDER_ID,
   appId:
     process.env.REACT_APP_APP_ID,
+  databaseURL:
+    process.env
+      .REACT_APP_DATABASE_URL,
 };
 
-// const curry =
-//   (f) =>
-//   (a, ...bs) =>
-//     bs.length ? f(a, ...bs) : (...bs) => f(a, ...bs);
-
-initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(
+  firebaseConfig,
+);
 
 //Auth
-export const auth = getAuth();
+export const auth = getAuth(
+  firebaseApp,
+);
 
 export const createUser = async (
   auth,
@@ -127,8 +136,6 @@ export const snapShot = (
     callback,
   );
 
-//const literal = (a, b) => orderBy(a, b);
-
 export const snap = (
   db,
   path,
@@ -171,8 +178,27 @@ export const updateNweet = async (
     update,
   );
 
-// export const snap = (db, path, callback, orderby = undefined) => {
-//   orderby
-//     ? onSnapshot(query(collection(db, path).order()), callback)
-//     : onSnapshot(query(collection(db, path)), callback);
-// };
+//storage
+export const storage =
+  getStorage();
+
+export const storageRef = (
+  storage,
+  child,
+) => ref(storage, child);
+
+export const uploadFile = async (
+  storageRef,
+  file,
+  meta,
+) =>
+  await uploadBytes(
+    storageRef,
+    file,
+    meta,
+  );
+
+export const downloadFile = async (
+  storageRef,
+) =>
+  await getDownloadURL(storageRef);

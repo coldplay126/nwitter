@@ -1,8 +1,13 @@
 import Nweet from "components/Nweet";
+import { v4 as uuidv4 } from "uuid";
 import {
   db,
   docRef,
+  downloadFile,
   snap,
+  storage,
+  storageRef,
+  uploadFile,
 } from "fb";
 import {
   useEffect,
@@ -18,6 +23,8 @@ const Home = ({ userObj }) => {
   const [error, setError] =
     useState("");
   const [preview, setPreview] =
+    useState("");
+  const [upload, setUpload] =
     useState();
 
   // old one
@@ -55,24 +62,44 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const {
-      target: { value },
-    } = e;
-    if (value === nweet) {
-      try {
-        await docRef(
-          db,
-          "nweets",
-          {
-            text: nweet,
-            CreatedAt: Date.now(),
-            creatorId: userObj.uid,
-          },
+    try {
+      const ref = storageRef(
+        storage,
+        `${
+          userObj.uid
+        }/${uuidv4()}`,
+      );
+      const metadata = {
+        contentType: "image/jpeg",
+      };
+
+      const respone =
+        await uploadFile(
+          ref,
+          upload,
+          metadata,
         );
-        setNweet("");
-      } catch (err) {
-        setError(err);
-      }
+
+      console.log(
+        "업로드",
+        respone,
+        respone.ref,
+      );
+
+      await downloadFile(
+        respone.ref,
+      ).then((url) =>
+        console.log(url),
+      );
+
+      // await docRef(db, "nweets", {
+      //   text: nweet,
+      //   CreatedAt: Date.now(),
+      //   creatorId: userObj.uid,
+      // });
+      // setNweet("");
+    } catch (err) {
+      setError(err);
     }
   };
 
@@ -82,6 +109,8 @@ const Home = ({ userObj }) => {
     const {
       target: { files },
     } = e;
+
+    setUpload(files[0]);
 
     const url =
       window.URL.createObjectURL(
@@ -156,6 +185,7 @@ const Home = ({ userObj }) => {
           />
         ))}
       </div>
+      <img />
     </div>
   );
 };

@@ -37,14 +37,13 @@ const Auth = () => {
   ) => {
     event.preventDefault();
     try {
-      let data;
       if (newAccount) {
-        data = await createUser(
+        await createUser(
           form.email,
           form.password,
         );
       } else {
-        data = await signIn(
+        await signIn(
           auth,
           form.email,
           form.password,
