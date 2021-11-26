@@ -1,10 +1,10 @@
 import Nweet from "components/Nweet";
 import { v4 as uuidv4 } from "uuid";
 import {
-  db,
   docRef,
   downloadFile,
-  snap,
+  orderByCurry,
+  snapFunction,
   storage,
   storageRef,
   uploadFile,
@@ -38,22 +38,19 @@ const Home = ({ userObj }) => {
 
   useEffect(() => {
     //refer to fb.js
-    snap(
-      db,
+    snapFunction(
       "nweets",
       (doc) => {
         const nweetArr = doc.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
         setNweets(nweetArr);
       },
-      "CreatedAt",
-      "desc",
+      orderByCurry("CreatedAt", "desc"),
     );
   }, []);
-
+  console.log(nweets);
   const onRef = useRef("");
 
   const onImage = (e) => {
@@ -96,10 +93,9 @@ const Home = ({ userObj }) => {
         await uploadFile(ref, upload);
 
         fileUrl = await downloadFile(ref);
-        console.log("파일 url", fileUrl);
       }
 
-      await docRef(db, "nweets", {
+      await docRef("nweets", {
         text: nweet,
         CreatedAt: Date.now(),
         creatorId: userObj.uid,
@@ -112,8 +108,6 @@ const Home = ({ userObj }) => {
       setError(err);
     }
   };
-
-  console.log("업로드", upload);
 
   return (
     <div>

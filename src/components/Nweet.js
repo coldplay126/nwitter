@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import {
-  db,
   deleteNweet,
   deleteObj,
   storage,
@@ -17,7 +16,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    updateNweet(db, "nweets", nweetObj.id, {
+    updateNweet("nweets", nweetObj.id, {
       text: newNweet,
     });
     setEdit(false);
@@ -28,11 +27,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
       "이 트윗을 삭제하시겠습니까?",
     );
     if (ok)
-      await deleteNweet(
-        db,
-        "nweets",
-        nweetObj.id,
-      );
+      await deleteNweet("nweets", nweetObj.id);
 
     if (nweetObj.fileUrl)
       await deleteObj(

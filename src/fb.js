@@ -20,6 +20,7 @@ import {
   orderBy,
   deleteDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 import {
@@ -41,6 +42,20 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
+
+// const curry = (f) =>
+//   f.length
+//     ? function (...a) {
+//         return curry(f.bind(f, ...a));
+//       }
+//     : f();
+
+const curry =
+  (f) =>
+  (a, ...bs) =>
+    bs.length
+      ? f(a, ...bs)
+      : (...bs) => f(a, ...bs);
 
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -84,51 +99,65 @@ export const popUp = async (auth, provider) =>
   await signInWithPopup(auth, provider);
 
 //DB
-export const db = getFirestore();
+const db = getFirestore();
 
-export const docRef = async (db, docu, object) =>
-  await addDoc(collection(db, docu), object);
+const queryCurry = (t, ...arg) =>
+  curry(query(t, ...arg));
 
-export const querySnapShot = async (db, docu) =>
-  await getDocs(collection(db, docu));
+const docRefCurry = curry(
+  async (db, docu, object) =>
+    await addDoc(collection(db, docu), object),
+);
 
-export const snapShot = (
-  db,
-  path,
-  segm,
-  callback,
-) => onSnapshot(doc(db, path, segm), callback);
+const querySnapShotCurry = curry(
+  async (db, docu) =>
+    await getDocs(collection(db, docu)),
+);
 
-export const snap = (
-  db,
-  path,
-  callback,
-  ...arg
-) => {
-  arg
-    ? onSnapshot(
-        query(
-          collection(db, path),
-          orderBy(arg[0], arg[1]),
-        ),
-        callback,
-      )
-    : onSnapshot(
-        query(collection(db, path)),
-        callback,
-      );
-};
+const snapShotCurry = curry(
+  (db, path, segm, callback) =>
+    onSnapshot(doc(db, path, segm), callback),
+);
 
-export const deleteNweet = async (db, col, id) =>
-  await deleteDoc(doc(db, col, id));
+export const orderByCurry = (path, order) =>
+  orderBy(path, order);
 
-export const updateNweet = async (
-  db,
-  col,
-  id,
-  update,
-) => await updateDoc(doc(db, col, id), update);
+export const whereCurry = (t, e, n) =>
+  where(t, e, n);
 
+const snapCurry = curry((db, path, callback) => {
+  onSnapshot(
+    query(collection(db, path)),
+    callback,
+  );
+});
+
+const snapFunctionCurry = curry(
+  (db, path, callback, f) => {
+    onSnapshot(
+      query(collection(db, path), f),
+      callback,
+    );
+  },
+);
+const deleteNweetCurry = curry(
+  async (db, col, id) =>
+    await deleteDoc(doc(db, col, id)),
+);
+
+const updateNweetCurry = curry(
+  async (db, col, id, update) =>
+    await updateDoc(doc(db, col, id), update),
+);
+
+export const docRef = docRefCurry(db);
+export const querySnapShot =
+  querySnapShotCurry(db);
+export const snapShot = snapShotCurry(db);
+export const snap = snapCurry(db);
+export const snapFunction = snapFunctionCurry(db);
+export const deleteNweet = deleteNweetCurry(db);
+export const updateNweet = updateNweetCurry(db);
 //storage
 export const storage = getStorage();
 
