@@ -16,16 +16,11 @@ import {
 } from "react";
 
 const Home = ({ userObj }) => {
-  const [nweet, setNweet] =
-    useState("");
-  const [nweets, setNweets] =
-    useState([]);
-  const [error, setError] =
-    useState("");
-  const [preview, setPreview] =
-    useState("");
-  const [upload, setUpload] =
-    useState();
+  const [nweet, setNweet] = useState("");
+  const [nweets, setNweets] = useState([]);
+  const [error, setError] = useState("");
+  const [preview, setPreview] = useState("");
+  const [upload, setUpload] = useState("");
 
   // old one
   // const getQuery = async () => {
@@ -47,11 +42,10 @@ const Home = ({ userObj }) => {
       db,
       "nweets",
       (doc) => {
-        const nweetArr =
-          doc.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+        const nweetArr = doc.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
         setNweets(nweetArr);
       },
@@ -59,49 +53,6 @@ const Home = ({ userObj }) => {
       "desc",
     );
   }, []);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const ref = storageRef(
-        storage,
-        `${
-          userObj.uid
-        }/${uuidv4()}`,
-      );
-      const metadata = {
-        contentType: "image/jpeg",
-      };
-
-      const respone =
-        await uploadFile(
-          ref,
-          upload,
-          metadata,
-        );
-
-      console.log(
-        "업로드",
-        respone,
-        respone.ref,
-      );
-
-      await downloadFile(
-        respone.ref,
-      ).then((url) =>
-        console.log(url),
-      );
-
-      // await docRef(db, "nweets", {
-      //   text: nweet,
-      //   CreatedAt: Date.now(),
-      //   creatorId: userObj.uid,
-      // });
-      // setNweet("");
-    } catch (err) {
-      setError(err);
-    }
-  };
 
   const onRef = useRef("");
 
@@ -112,15 +63,12 @@ const Home = ({ userObj }) => {
 
     setUpload(files[0]);
 
-    const url =
-      window.URL.createObjectURL(
-        files[0],
-      );
+    const url = window.URL.createObjectURL(
+      files[0],
+    );
     setPreview(url);
     window.onload = () =>
-      window.URL.revokeObjectURL(
-        url,
-      );
+      window.URL.revokeObjectURL(url);
   };
 
   const onChange = (e) => {
@@ -130,10 +78,42 @@ const Home = ({ userObj }) => {
     setNweet(value);
   };
 
-  const onAttachment = () => {
+  const onCancel = () => {
     setPreview(null);
     onRef.current.value = null;
   };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let fileUrl = "";
+      if (upload !== "") {
+        const ref = storageRef(
+          storage,
+          `${userObj.uid}/${uuidv4()}`,
+        );
+
+        await uploadFile(ref, upload);
+
+        fileUrl = await downloadFile(ref);
+        console.log("파일 url", fileUrl);
+      }
+
+      await docRef(db, "nweets", {
+        text: nweet,
+        CreatedAt: Date.now(),
+        creatorId: userObj.uid,
+        fileUrl,
+      });
+      setNweet("");
+      setUpload("");
+      onCancel();
+    } catch (err) {
+      setError(err);
+    }
+  };
+
+  console.log("업로드", upload);
 
   return (
     <div>
@@ -151,10 +131,7 @@ const Home = ({ userObj }) => {
           onChange={onImage}
           ref={onRef}
         />
-        <input
-          type="submit"
-          value="Nweet"
-        />
+        <input type="submit" value="Nweet" />
         {preview && (
           <div>
             <img
@@ -162,12 +139,8 @@ const Home = ({ userObj }) => {
               src={preview}
               alt="thumbnail"
             />
-            <button
-              onClick={
-                onAttachment
-              }
-            >
-              clear
+            <button onClick={onCancel}>
+              취소
             </button>
           </div>
         )}
@@ -178,14 +151,12 @@ const Home = ({ userObj }) => {
           <Nweet
             key={nweet.id}
             isOwner={
-              nweet.creatorId ===
-              userObj.uid
+              nweet.creatorId === userObj.uid
             }
             nweetObj={nweet}
           />
         ))}
       </div>
-      <img />
     </div>
   );
 };

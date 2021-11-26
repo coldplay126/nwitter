@@ -190,12 +190,10 @@ export const storageRef = (
 export const uploadFile = async (
   storageRef,
   file,
-  meta,
 ) =>
   await uploadBytes(
     storageRef,
     file,
-    meta,
   );
 
 export const downloadFile = async (

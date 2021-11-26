@@ -1,28 +1,18 @@
 import { useState } from "react";
 
-import {
-  db,
-  deleteNweet,
-  updateNweet,
-} from "fb";
+import { db, deleteNweet, updateNweet } from "fb";
 
-const Nweet = ({
-  nweetObj,
-  isOwner,
-}) => {
-  const [edit, setEdit] =
-    useState(false);
-  const [newNweet, setNewNweet] =
-    useState(nweetObj.text);
+const Nweet = ({ nweetObj, isOwner }) => {
+  const [edit, setEdit] = useState(false);
+  const [newNweet, setNewNweet] = useState(
+    nweetObj.text,
+  );
 
   const onSubmit = (event) => {
     event.preventDefault();
-    updateNweet(
-      db,
-      "nweets",
-      nweetObj.id,
-      { text: newNweet },
-    );
+    updateNweet(db, "nweets", nweetObj.id, {
+      text: newNweet,
+    });
     setEdit(false);
   };
 
@@ -31,11 +21,7 @@ const Nweet = ({
       "이 트윗을 삭제하시겠습니까?",
     );
     if (ok)
-      deleteNweet(
-        db,
-        "nweets",
-        nweetObj.id,
-      );
+      deleteNweet(db, "nweets", nweetObj.id);
   };
 
   const onEdit = (event) => {
@@ -48,15 +34,12 @@ const Nweet = ({
   const toggleEdit = () =>
     setEdit((prev) => !prev);
 
-  const onClickHandler = async (
-    event,
-  ) => {
+  const onClickHandler = async (event) => {
     const {
       target: { name },
     } = event;
 
-    if (name === "delete")
-      await onDelete();
+    if (name === "delete") await onDelete();
     else toggleEdit();
   };
 
@@ -66,9 +49,7 @@ const Nweet = ({
         <>
           {isOwner && (
             <>
-              <form
-                onSubmit={onSubmit}
-              >
+              <form onSubmit={onSubmit}>
                 <input
                   type="text"
                   placeholder="내용을 수정하세요"
@@ -81,11 +62,7 @@ const Nweet = ({
                   value="수정"
                 />
               </form>
-              <button
-                onClick={
-                  onClickHandler
-                }
-              >
+              <button onClick={onClickHandler}>
                 취소
               </button>
             </>
@@ -94,21 +71,24 @@ const Nweet = ({
       ) : (
         <>
           <h4>{nweetObj.text}</h4>
+          {nweetObj.fileUrl && (
+            <img
+              height="100px"
+              src={nweetObj.fileUrl}
+              alt="img"
+            />
+          )}
           {isOwner && (
             <>
               <button
                 name="edit"
-                onClick={
-                  onClickHandler
-                }
+                onClick={onClickHandler}
               >
                 수정
               </button>
               <button
                 name="delete"
-                onClick={
-                  onClickHandler
-                }
+                onClick={onClickHandler}
               >
                 삭제
               </button>
