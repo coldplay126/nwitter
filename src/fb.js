@@ -27,38 +27,25 @@ import {
   ref,
   uploadBytes,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey:
-    process.env.REACT_APP_API_KEY,
-  authDomain:
-    process.env
-      .REACT_APP_AUTH_DOMAIN,
-  projectId:
-    process.env
-      .REACT_APP_PROJECT_ID,
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket:
-    process.env
-      .REACT_APP_STORAGE_BUCKET,
+    process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId:
-    process.env
-      .REACT_APP_MESSAGEING_SENDER_ID,
-  appId:
-    process.env.REACT_APP_APP_ID,
-  databaseURL:
-    process.env
-      .REACT_APP_DATABASE_URL,
+    process.env.REACT_APP_MESSAGEING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
-const firebaseApp = initializeApp(
-  firebaseConfig,
-);
+const firebaseApp = initializeApp(firebaseConfig);
 
 //Auth
-export const auth = getAuth(
-  firebaseApp,
-);
+export const auth = getAuth(firebaseApp);
 
 export const createUser = async (
   auth,
@@ -82,13 +69,9 @@ export const signIn = async (
     password,
   );
 
-export const authState = (
-  auth,
-  callback,
-) =>
-  onAuthStateChanged(
-    auth,
-    (user) => callback(user),
+export const authState = (auth, callback) =>
+  onAuthStateChanged(auth, (user) =>
+    callback(user),
   );
 
 export const googleProvider =
@@ -97,44 +80,24 @@ export const googleProvider =
 export const githubProvider =
   new GithubAuthProvider();
 
-export const popUp = async (
-  auth,
-  provider,
-) =>
-  await signInWithPopup(
-    auth,
-    provider,
-  );
+export const popUp = async (auth, provider) =>
+  await signInWithPopup(auth, provider);
 
 //DB
 export const db = getFirestore();
 
-export const docRef = async (
-  db,
-  docu,
-  object,
-) =>
-  await addDoc(
-    collection(db, docu),
-    object,
-  );
+export const docRef = async (db, docu, object) =>
+  await addDoc(collection(db, docu), object);
 
-export const querySnapShot =
-  async (db, docu) =>
-    await getDocs(
-      collection(db, docu),
-    );
+export const querySnapShot = async (db, docu) =>
+  await getDocs(collection(db, docu));
 
 export const snapShot = (
   db,
   path,
   segm,
   callback,
-) =>
-  onSnapshot(
-    doc(db, path, segm),
-    callback,
-  );
+) => onSnapshot(doc(db, path, segm), callback);
 
 export const snap = (
   db,
@@ -151,52 +114,34 @@ export const snap = (
         callback,
       )
     : onSnapshot(
-        query(
-          collection(db, path),
-        ),
+        query(collection(db, path)),
         callback,
       );
 };
 
-export const deleteNweet = async (
-  db,
-  col,
-  id,
-) =>
-  await deleteDoc(
-    doc(db, col, id),
-  );
+export const deleteNweet = async (db, col, id) =>
+  await deleteDoc(doc(db, col, id));
 
 export const updateNweet = async (
   db,
   col,
   id,
   update,
-) =>
-  await updateDoc(
-    doc(db, col, id),
-    update,
-  );
+) => await updateDoc(doc(db, col, id), update);
 
 //storage
-export const storage =
-  getStorage();
+export const storage = getStorage();
 
-export const storageRef = (
-  storage,
-  child,
-) => ref(storage, child);
+export const storageRef = (storage, child) =>
+  ref(storage, child);
 
 export const uploadFile = async (
   storageRef,
   file,
-) =>
-  await uploadBytes(
-    storageRef,
-    file,
-  );
+) => await uploadBytes(storageRef, file);
 
-export const downloadFile = async (
-  storageRef,
-) =>
+export const downloadFile = async (storageRef) =>
   await getDownloadURL(storageRef);
+
+export const deleteObj = async (ref) =>
+  await deleteObject(ref);

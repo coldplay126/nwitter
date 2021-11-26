@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-import { db, deleteNweet, updateNweet } from "fb";
+import {
+  db,
+  deleteNweet,
+  deleteObj,
+  storage,
+  storageRef,
+  updateNweet,
+} from "fb";
 
 const Nweet = ({ nweetObj, isOwner }) => {
   const [edit, setEdit] = useState(false);
@@ -16,12 +23,21 @@ const Nweet = ({ nweetObj, isOwner }) => {
     setEdit(false);
   };
 
-  const onDelete = () => {
+  const onDelete = async () => {
     const ok = window.confirm(
       "이 트윗을 삭제하시겠습니까?",
     );
     if (ok)
-      deleteNweet(db, "nweets", nweetObj.id);
+      await deleteNweet(
+        db,
+        "nweets",
+        nweetObj.id,
+      );
+
+    if (nweetObj.fileUrl)
+      await deleteObj(
+        storageRef(storage, nweetObj.fileUrl),
+      );
   };
 
   const onEdit = (event) => {
