@@ -101,8 +101,7 @@ export const popUp = async (auth, provider) =>
 //DB
 const db = getFirestore();
 
-const queryCurry = (t, ...arg) =>
-  curry(query(t, ...arg));
+//const q = (t, ...e) => query(t, e);
 
 const docRefCurry = curry(
   async (db, docu, object) =>

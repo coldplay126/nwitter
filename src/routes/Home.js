@@ -22,20 +22,6 @@ const Home = ({ userObj }) => {
   const [preview, setPreview] = useState("");
   const [upload, setUpload] = useState("");
 
-  // old one
-  // const getQuery = async () => {
-  //   const dbNweets = await querySnapShot(db, "nweets");
-
-  //   dbNweets.forEach((docs) => {
-  //     const nweetObj = {
-  //       ...docs.data(),
-  //       id: docs.id,
-  //     };
-
-  //     setNweets((prev) => [nweetObj, ...prev]);
-  //   });
-  // };
-
   useEffect(() => {
     //refer to fb.js
     snapFunction(
@@ -50,7 +36,6 @@ const Home = ({ userObj }) => {
       orderByCurry("CreatedAt", "desc"),
     );
   }, []);
-  console.log(nweets);
   const onRef = useRef("");
 
   const onImage = (e) => {

@@ -1,8 +1,10 @@
-import { auth, snap } from "fb";
-import { useEffect } from "react";
+import { auth, querySnapShot } from "fb";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const Profile = ({ userObj }) => {
+  const [newDisplayName, setNewDisplayName] =
+    useState(userObj.displayName);
   const navigate = useNavigate();
 
   const signout = async () =>
@@ -12,16 +14,41 @@ const Profile = ({ userObj }) => {
     signout().then(() => navigate("/"));
   };
 
-  const getmyNweets = async () => {
-    const nweets = snap("nweets");
+  // const getmyNweets = async () => {
+  //   const nweets = await querySnapShot(
+  //     "nweets",
+  //   ).then((doc) =>
+  //     console.log(doc.docs.map((a) => a.data())),
+  //   );
+  // };
+
+  const onChange = (e) => {
+    const {
+      target: { value },
+    } = e;
+    setNewDisplayName(value);
   };
 
-  useEffect(() => {
-    getmyNweets();
-  }, []);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (userObj.displayName !== newDisplayName) {
+    }
+  };
 
   return (
     <>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="Display Name"
+          value={newDisplayName}
+          onChange={onChange}
+        />
+        <input
+          type="submit"
+          value="update Profile"
+        />
+      </form>
       <button
         name="LogOut"
         onClick={OnLogoutClick}
