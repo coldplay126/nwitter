@@ -1,8 +1,8 @@
-import { auth, querySnapShot } from "fb";
-import { useEffect, useState } from "react";
+import { auth, profile } from "fb";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
-const Profile = ({ userObj }) => {
+const Profile = ({ userObj, refreshUser }) => {
   const [newDisplayName, setNewDisplayName] =
     useState(userObj.displayName);
   const navigate = useNavigate();
@@ -14,14 +14,6 @@ const Profile = ({ userObj }) => {
     signout().then(() => navigate("/"));
   };
 
-  // const getmyNweets = async () => {
-  //   const nweets = await querySnapShot(
-  //     "nweets",
-  //   ).then((doc) =>
-  //     console.log(doc.docs.map((a) => a.data())),
-  //   );
-  // };
-
   const onChange = (e) => {
     const {
       target: { value },
@@ -29,9 +21,14 @@ const Profile = ({ userObj }) => {
     setNewDisplayName(value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (userObj.displayName !== newDisplayName) {
+      await profile(userObj, {
+        displayName: newDisplayName,
+      });
+      await refreshUser();
+      console.log(userObj);
     }
   };
 

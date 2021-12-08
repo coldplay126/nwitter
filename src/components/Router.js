@@ -4,7 +4,11 @@ import Home from "routes/Home";
 import Profile from "routes/Profile";
 import Navigation from "components/Navigation";
 
-const AppRouter = ({ isLogIn, userObj }) => {
+const AppRouter = ({
+  isLogIn,
+  userObj,
+  refreshUser,
+}) => {
   return (
     <>
       <div>
@@ -22,7 +26,10 @@ const AppRouter = ({ isLogIn, userObj }) => {
             <Route
               path="/profile"
               element={
-                <Profile userObj={userObj} />
+                <Profile
+                  refreshUser={refreshUser}
+                  userObj={userObj}
+                />
               }
             />
           </>

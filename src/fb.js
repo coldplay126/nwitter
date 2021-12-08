@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 
 import {
@@ -43,13 +44,6 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
-// const curry = (f) =>
-//   f.length
-//     ? function (...a) {
-//         return curry(f.bind(f, ...a));
-//       }
-//     : f();
-
 const curry =
   (f) =>
   (a, ...bs) =>
@@ -57,10 +51,13 @@ const curry =
       ? f(a, ...bs)
       : (...bs) => f(a, ...bs);
 
-const firebaseApp = initializeApp(firebaseConfig);
+const init = initializeApp(firebaseConfig);
 
 //Auth
-export const auth = getAuth(firebaseApp);
+export const auth = getAuth(init);
+
+export const profile = async (auth, data) =>
+  await updateProfile(auth, data);
 
 export const createUser = async (
   auth,
@@ -100,8 +97,6 @@ export const popUp = async (auth, provider) =>
 
 //DB
 const db = getFirestore();
-
-//const q = (t, ...e) => query(t, e);
 
 const docRefCurry = curry(
   async (db, docu, object) =>
@@ -157,6 +152,7 @@ export const snap = snapCurry(db);
 export const snapFunction = snapFunctionCurry(db);
 export const deleteNweet = deleteNweetCurry(db);
 export const updateNweet = updateNweetCurry(db);
+
 //storage
 export const storage = getStorage();
 
