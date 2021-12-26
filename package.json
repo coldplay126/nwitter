@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "dotenv": "^10.0.0",
     "firebase": "^9.4.1",
+    "gh-pages": "^3.2.3",
     "gitmoji-cli": "^4.7.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -18,7 +19,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +44,6 @@
   "devDependencies": {
     "axios": "^0.24.0",
     "uuid": "^8.3.2"
-  }
+  },
+  "homepage": "https://coldplay126.github.io/nwitter"
 }
