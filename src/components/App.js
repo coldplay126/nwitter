@@ -1,24 +1,27 @@
 import { useState, useEffect } from "react";
 import AppRouter from "components/Router";
 import { auth, authState, profile } from "fb";
-import _ from "lodash";
 
 function App() {
   const [init, setInit] = useState(false);
   const [userObj, setUserObj] = useState(null);
-  const [name, setName] = useState("");
+  const [changeName, setChangeName] =
+    useState(false);
 
   useEffect(
     () =>
       authState(auth, async (user) => {
         if (user) {
-          user.displayName
-            ? await setUserObj(user)
-            : await profile(user, {
-                displayName: user.email,
-              });
+          user.displayName === null
+            ? await profile(user, {
+                displayName:
+                  user.providerData[0].email,
+              })
+            : await setUserObj(user);
           await setUserObj(user);
-        } else setUserObj(null);
+        } else {
+          setUserObj(null);
+        }
         setInit(true);
       }),
     [],
@@ -26,10 +29,9 @@ function App() {
 
   const islogIn = Boolean(userObj);
 
-  const refreshUser = async () => {
-    const user = auth.currentUser;
-    setName(user.displayName);
-  };
+  function refreshUser() {
+    return setChangeName((prev) => !prev);
+  }
 
   return (
     <>
