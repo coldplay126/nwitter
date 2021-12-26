@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "https://coldplay126.github.io/nwitter/static/js/main.b9e4214f.chunk.js",
-    "main.js.map": "https://coldplay126.github.io/nwitter/static/js/main.b9e4214f.chunk.js.map",
+    "main.js": "https://coldplay126.github.io/nwitter/static/js/main.3c44ecc4.chunk.js",
+    "main.js.map": "https://coldplay126.github.io/nwitter/static/js/main.3c44ecc4.chunk.js.map",
     "runtime-main.js": "https://coldplay126.github.io/nwitter/static/js/runtime-main.730d778e.js",
     "runtime-main.js.map": "https://coldplay126.github.io/nwitter/static/js/runtime-main.730d778e.js.map",
     "static/js/2.74331e4c.chunk.js": "https://coldplay126.github.io/nwitter/static/js/2.74331e4c.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.730d778e.js",
     "static/js/2.74331e4c.chunk.js",
-    "static/js/main.b9e4214f.chunk.js"
+    "static/js/main.3c44ecc4.chunk.js"
   ]
 }
