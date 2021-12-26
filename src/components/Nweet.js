@@ -1,18 +1,10 @@
 import { useState } from "react";
 
-import {
-  deleteNweet,
-  deleteObj,
-  storage,
-  storageRef,
-  updateNweet,
-} from "fb";
+import { deleteNweet, deleteObj, storage, storageRef, updateNweet } from "fb";
 
 const Nweet = ({ nweetObj, isOwner }) => {
   const [edit, setEdit] = useState(false);
-  const [newNweet, setNewNweet] = useState(
-    nweetObj.text,
-  );
+  const [newNweet, setNewNweet] = useState(nweetObj.text);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -23,16 +15,11 @@ const Nweet = ({ nweetObj, isOwner }) => {
   };
 
   const onDelete = async () => {
-    const ok = window.confirm(
-      "이 트윗을 삭제하시겠습니까?",
-    );
-    if (ok)
-      await deleteNweet("nweets", nweetObj.id);
+    const ok = window.confirm("이 트윗을 삭제하시겠습니까?");
+    if (ok) await deleteNweet("nweets", nweetObj.id);
 
     if (nweetObj.fileUrl)
-      await deleteObj(
-        storageRef(storage, nweetObj.fileUrl),
-      );
+      await deleteObj(storageRef(storage, nweetObj.fileUrl));
   };
 
   const onEdit = (event) => {
@@ -42,8 +29,7 @@ const Nweet = ({ nweetObj, isOwner }) => {
     setNewNweet(value);
   };
 
-  const toggleEdit = () =>
-    setEdit((prev) => !prev);
+  const toggleEdit = () => setEdit((prev) => !prev);
 
   const onClickHandler = async (event) => {
     const {
@@ -68,14 +54,9 @@ const Nweet = ({ nweetObj, isOwner }) => {
                   value={newNweet}
                   required
                 />
-                <input
-                  type="submit"
-                  value="수정"
-                />
+                <input type="submit" value="수정" />
               </form>
-              <button onClick={onClickHandler}>
-                취소
-              </button>
+              <button onClick={onClickHandler}>취소</button>
             </>
           )}
         </>
@@ -83,24 +64,14 @@ const Nweet = ({ nweetObj, isOwner }) => {
         <>
           <h4>{nweetObj.text}</h4>
           {nweetObj.fileUrl && (
-            <img
-              height="100px"
-              src={nweetObj.fileUrl}
-              alt="img"
-            />
+            <img height="100px" src={nweetObj.fileUrl} alt="img" />
           )}
           {isOwner && (
             <>
-              <button
-                name="edit"
-                onClick={onClickHandler}
-              >
+              <button name="edit" onClick={onClickHandler}>
                 수정
               </button>
-              <button
-                name="delete"
-                onClick={onClickHandler}
-              >
+              <button name="delete" onClick={onClickHandler}>
                 삭제
               </button>
             </>

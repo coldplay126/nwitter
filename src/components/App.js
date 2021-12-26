@@ -5,8 +5,7 @@ import { auth, authState, profile } from "fb";
 function App() {
   const [init, setInit] = useState(false);
   const [userObj, setUserObj] = useState(null);
-  const [changeName, setChangeName] =
-    useState(false);
+  const [changeName, setChangeName] = useState(false);
 
   useEffect(
     () =>
@@ -14,8 +13,7 @@ function App() {
         if (user) {
           user.displayName === null
             ? await profile(user, {
-                displayName:
-                  user.providerData[0].email,
+                displayName: user.providerData[0].email,
               })
             : await setUserObj(user);
           await setUserObj(user);
@@ -44,9 +42,7 @@ function App() {
       ) : (
         "Loading..."
       )}
-      <footer>
-        &copy; {new Date().getFullYear()} Nwitter
-      </footer>
+      <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </>
   );
 }

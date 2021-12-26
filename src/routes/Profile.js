@@ -3,12 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 const Profile = ({ userObj, refreshUser }) => {
-  const [newDisplayName, setNewDisplayName] =
-    useState(userObj.displayName);
+  const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
   const navigate = useNavigate();
 
-  const signout = async () =>
-    await auth.signOut();
+  const signout = async () => await auth.signOut();
 
   const OnLogoutClick = () => {
     signout().then(() => navigate("/"));
@@ -40,15 +38,9 @@ const Profile = ({ userObj, refreshUser }) => {
           value={newDisplayName}
           onChange={onChange}
         />
-        <input
-          type="submit"
-          value="update Profile"
-        />
+        <input type="submit" value="update Profile" />
       </form>
-      <button
-        name="LogOut"
-        onClick={OnLogoutClick}
-      >
+      <button name="LogOut" onClick={OnLogoutClick}>
         Log Out
       </button>
     </>
