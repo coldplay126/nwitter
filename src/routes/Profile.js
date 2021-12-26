@@ -1,22 +1,53 @@
-import { auth } from "fb";
+import { auth, profile } from "fb";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
-const Profile = () => {
+const Profile = ({ userObj, refreshUser }) => {
+  const [newDisplayName, setNewDisplayName] =
+    useState(userObj.displayName);
   const navigate = useNavigate();
+
   const signout = async () =>
     await auth.signOut();
-  const redirect = (a) =>
-    navigate(a);
 
-  const onLogoutClick = () => {
-    signout().then(redirect("/"));
+  const OnLogoutClick = () => {
+    signout().then(() => navigate("/"));
+  };
+
+  const onChange = (e) => {
+    const {
+      target: { value },
+    } = e;
+    setNewDisplayName(value);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (userObj.displayName !== newDisplayName) {
+      await profile(userObj, {
+        displayName: newDisplayName,
+      });
+      refreshUser();
+    }
   };
 
   return (
     <>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="Display Name"
+          value={newDisplayName}
+          onChange={onChange}
+        />
+        <input
+          type="submit"
+          value="update Profile"
+        />
+      </form>
       <button
         name="LogOut"
-        onClick={onLogoutClick}
+        onClick={OnLogoutClick}
       >
         Log Out
       </button>

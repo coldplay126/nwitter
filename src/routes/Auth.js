@@ -9,18 +9,13 @@ import {
 import { useState } from "react";
 
 const Auth = () => {
-  const [form, setForm] = useState(
-    {
-      email: "",
-      password: "",
-    },
-  );
-  const [
-    newAccount,
-    setNewAccount,
-  ] = useState(true);
-  const [error, setError] =
-    useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const [newAccount, setNewAccount] =
+    useState(true);
+  const [error, setError] = useState("");
 
   const onChanage = (e) => {
     const {
@@ -32,19 +27,17 @@ const Auth = () => {
     });
   };
 
-  const onSubmit = async (
-    event,
-  ) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      let data;
       if (newAccount) {
-        data = await createUser(
+        await createUser(
+          auth,
           form.email,
           form.password,
         );
       } else {
-        data = await signIn(
+        await signIn(
           auth,
           form.email,
           form.password,
@@ -58,26 +51,16 @@ const Auth = () => {
   const toggleAccount = () =>
     setNewAccount((prev) => !prev);
 
-  const socialClick = async (
-    e,
-  ) => {
+  const socialClick = async (e) => {
     const {
       target: { name },
     } = e;
 
     try {
       if (name === "google") {
-        await popUp(
-          auth,
-          googleProvider,
-        );
-      } else if (
-        name === "github"
-      ) {
-        await popUp(
-          auth,
-          githubProvider,
-        );
+        await popUp(auth, googleProvider);
+      } else if (name === "github") {
+        await popUp(auth, githubProvider);
       }
     } catch (err) {
       setError(err.message);
@@ -113,9 +96,7 @@ const Auth = () => {
         />
         {error}
       </form>
-      <span
-        onClick={toggleAccount}
-      >
+      <span onClick={toggleAccount}>
         {newAccount
           ? "Sign In"
           : "Create Account"}

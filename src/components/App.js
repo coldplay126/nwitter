@@ -1,50 +1,51 @@
-import {
-  useState,
-  useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 import AppRouter from "components/Router";
-import {
-  auth,
-  authState,
-} from "fb";
+import { auth, authState, profile } from "fb";
 
 function App() {
-  const [init, setInit] =
+  const [init, setInit] = useState(false);
+  const [userObj, setUserObj] = useState(null);
+  const [changeName, setChangeName] =
     useState(false);
-  const [isLogIn, setIslogIn] =
-    useState(false);
-  const [userObj, setUserObj] =
-    useState(null);
 
-  useEffect(() => {
-    //effect;
-    return authState(
-      auth,
-      (user) => {
+  useEffect(
+    () =>
+      authState(auth, async (user) => {
         if (user) {
-          setIslogIn(true);
-          setUserObj(user);
-        } else setIslogIn(false);
-
+          user.displayName === null
+            ? await profile(user, {
+                displayName:
+                  user.providerData[0].email,
+              })
+            : await setUserObj(user);
+          await setUserObj(user);
+        } else {
+          setUserObj(null);
+        }
         setInit(true);
-      },
-    );
-  }, []);
+      }),
+    [],
+  );
+
+  const islogIn = Boolean(userObj);
+
+  function refreshUser() {
+    return setChangeName((prev) => !prev);
+  }
 
   return (
     <>
       {init ? (
         <AppRouter
-          isLogIn={isLogIn}
+          refreshUser={refreshUser}
+          isLogIn={islogIn}
           userObj={userObj}
         />
       ) : (
         "Loading..."
       )}
       <footer>
-        &copy;{" "}
-        {new Date().getFullYear()}{" "}
-        Nwitter
+        &copy; {new Date().getFullYear()} Nwitter
       </footer>
     </>
   );
