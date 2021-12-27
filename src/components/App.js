@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AppRouter from "components/Router";
 import { auth, authState, profile } from "fb";
+import { subscribe } from "routes/Home";
 
 function App() {
   const [init, setInit] = useState(false);
